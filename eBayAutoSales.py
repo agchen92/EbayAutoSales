@@ -44,3 +44,24 @@ autos=autos.drop(columns=['seller','offer_type'])
 autos['price']=(autos['price'].str.replace('$','').str.replace(',','').astype(int))
 autos['odometer']=(autos['odometer'].str.replace(',','').str.replace('km','').astype(int))
 #Rename odometer
+autos=autos.rename(columns={'odometer':'odometer_km'})
+
+
+#Begin data exploration, to find outliers or discrepancys in the data
+autos['odometer_km'].unique()
+autos['odometer_km'].describe()
+autos['odometer_km'].isnull().sum()
+autos['odometer_km'].value_counts().sort_index(ascending=True)
+#Through exploring the data in the 'odometer_km' column, we can see that
+#there is no unreasonable outlier in the data and also no null values.
+#The distribution is reasonable, so we can use every data in these columns.
+
+autos['price'].unique()
+autos['price'].describe()
+autos['price'].isnull().sum()
+autos['price'].value_counts().sort_index(ascending=True)
+#Through exploring the data in the 'price' column, we can see that there
+#is a larger number of 0USD and 1USD pricing. This is most likely a tactic
+#to encourage viewers to click on the post itself. I will keep these data points.
+#However, there is a few outliers surpassing >=1million USD. I will like to remove
+#these since nothing that valuable would be advertised on eBay.
