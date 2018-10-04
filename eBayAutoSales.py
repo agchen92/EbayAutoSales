@@ -108,15 +108,29 @@ autos['last_seen'].str[:10].value_counts(normalize=True)
 #as the distribution for date created. This is expected as all ads have the same
 #expiration time.
 
-top_fivepercent_brands=autos['brand'].value_counts().head(7)
-top_brands=top_fivepercent_brands.index
-mean_dict={}
+brands_top6 = autos["brand"].value_counts().head(6)
 
-for name in top_brands:
-    avg = autos.loc[autos['brand']==name, 'price'].mean()
-    mean_dict[name]= round(avg,2)
+avgprice_dict = {}   
+brand_names = brands_top6.index    
 
-print(mean_dict)
+for name in brand_names:
+    avg = autos.loc[autos["brand"] == name, "price"].mean()
+    avgprice_dict[name] = round(avg, 2)
+
+print(avgprice_dict)
 #Through this script, we can see the average selling price for the vehicles
 #in the top brands. From the data, it is clear that Audi has the best resell
 #price. 
+
+avgmileage_dict={}
+brand_names = brands_top6.index
+
+for name in brand_names:
+    avg = autos.loc[autos["brand"] == name, "odometer_km"].mean()
+    avgmileage_dict[name] = round(avg, 2)
+
+print(avgmileage_dict)
+#By aggregating the mileage traveled by brand, we can see the
+#mean mileage of the used cars of the top brands. We can further
+#look into insights by making a dataframe of this and the previous
+#aggregated information.
