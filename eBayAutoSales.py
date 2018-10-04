@@ -95,8 +95,28 @@ autos['last_seen']
 
 #Strategy: separate time values into two parts and drop the timestamp or do .str[:10]
 #to just look at the necessary info about year, months, and days.
-autos['date_crawled'].str[:10].value_counts(normalize=True).sort_index(ascending=True)
+autos['date_crawled'].str[:10].value_counts(normalize=True)
 #
-autos['ad_created'].str[:10].value_counts(normalize=True).sort_index(ascending=True)
+autos['ad_created'].str[:10].value_counts(normalize=True)
 #
-autos['last_seen'].str[:10].value_counts(normalize=True).sort_index(ascending=True)
+autos['last_seen'].str[:10].value_counts(normalize=True)
+#
+#Looking at the distribution of the values, we can see that most of
+#the listings were created around March-April of 2016. The listings crawl
+#dates do not seem to have any trend as they are all fairly distributed
+#among all the dates. The 'last_seen' dates' distribution is fairly the same
+#as the distribution for date created. This is expected as all ads have the same
+#expiration time.
+
+top_fivepercent_brands=autos['brand'].value_counts().head(7)
+top_brands=top_fivepercent_brands.index
+mean_dict={}
+
+for name in top_brands:
+    avg = autos.loc[autos['brand']==name, 'price'].mean()
+    mean_dict[name]= round(avg,2)
+
+print(mean_dict)
+#Through this script, we can see the average selling price for the vehicles
+#in the top brands. From the data, it is clear that Audi has the best resell
+#price. 
