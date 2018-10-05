@@ -118,9 +118,11 @@ for name in brand_names:
     avgprice_dict[name] = round(avg, 2)
 
 print(avgprice_dict)
+
 #Through this script, we can see the average selling price for the vehicles
 #in the top brands. From the data, it is clear that Audi has the best resell
-#price. 
+#price. Audi, BMW, and Mercedes Benz are more expensive and have higher resale
+#value. Ford and Opel are less expensive and Volkswagen is in between.
 
 avgmileage_dict={}
 brand_names = brands_top6.index
@@ -130,7 +132,24 @@ for name in brand_names:
     avgmileage_dict[name] = round(avg, 2)
 
 print(avgmileage_dict)
+
 #By aggregating the mileage traveled by brand, we can see the
 #mean mileage of the used cars of the top brands. We can further
 #look into insights by making a dataframe of this and the previous
 #aggregated information.
+
+avgprice_series=pd.Series(avgprice_dict)
+avgmileage_series=pd.Series(avgmileage_dict)
+agg_df=pd.DataFrame(avgprice_series, columns=['average_price'])
+agg_df['average_mileage_km']=avgmileage_series
+agg_df
+
+#Alternative method for making a dataframe from two dictionaries
+#data_dict={'mean_price':bmp_series,'mean_mileage_km':bmm_series}
+#df=pd.DataFrame(data_dict)
+#df
+
+#By looking at the resulting dataframe that consists of average price
+#and mileage of the top brands, we can see that despite higher mileages,
+#the top performing brands like Audi, Benz, and BMW still manage to keep
+#their value.
