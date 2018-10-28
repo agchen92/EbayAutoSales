@@ -153,3 +153,27 @@ agg_df
 #and mileage of the top brands, we can see that despite higher mileages,
 #the top performing brands like Audi, Benz, and BMW still manage to keep
 #their value.
+
+#Let's do some basic data cleaning and see if we can find other insights
+#within the dataset.
+autos['vehicle_type'].unique()
+
+#From the data, we can see that the vehicle type column has some German words.
+#So, maybe if we convert this to their English counterparts, whoever looks here
+#can find some insights of their own.
+#kleinwagen=sedan, kombi=van, cabrio=convertible, andere=other
+#Let's lump nan with andere, just because they are both unknown in a sense.
+
+mapping_dict={
+    'bus' : 'bus',
+    'limousine' : 'limousine',
+    'kleinwagen' : 'sedan',
+    'kombi' : 'van',
+    'nan' : 'other',
+    'coupe' : 'coupe',
+    'suv' : 'suv',
+    'cabrio' : 'convertible',
+    'andre' : 'other'
+    }
+autos['vehicle_type']=autos['vehicle_type'].map(mapping_dict)
+autos['vehicle_type'].unique()
