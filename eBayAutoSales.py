@@ -169,11 +169,62 @@ mapping_dict={
     'limousine' : 'limousine',
     'kleinwagen' : 'sedan',
     'kombi' : 'van',
-    'nan' : 'other',
     'coupe' : 'coupe',
     'suv' : 'suv',
     'cabrio' : 'convertible',
     'andre' : 'other'
     }
 autos['vehicle_type']=autos['vehicle_type'].map(mapping_dict)
+autos['vehicle_type'].fillna('other',inplace=True)
 autos['vehicle_type'].unique()
+
+#Since we are already cleaning some data, let's convert the dates to
+#be uniform numeric data e.g. "2016-03-21" to 20160321
+#'date_crawled','ad_created','last_seen'
+date_crawled=autos['date_crawled']
+date_crawled_f=date_crawled.str.split(expand=True)[0].str.replace('-','').astype(int)
+autos['date_crawled']=date_crawled_f
+
+ad_created=autos['ad_created']
+ad_created_f=ad_created.str.split(expand=True)[0].str.replace('-','').astype(int)
+autos['ad_created']=ad_created_f
+
+last_seen=autos['last_seen']
+last_seen_f=last_seen.str.split(expand=True)[0].str.replace('-','').astype(int)
+autos['last_seen']=last_seen_f
+
+#Checking cleaned dataset
+autos.head(7)
+
+#Let's rename all German string values to their English counterpart
+#'gearbox' : manuell : manual, automatik : automatic
+#'fuel_type' : lpg : lpg, benzin : gasoline, diesel : diesel,
+#elektro : electric, andere: other
+
+mapping_dict={
+    'lpg' : 'lpg',
+    'benzin' : 'gasoline',
+    'diesel' : 'disel',
+    'cng' : 'cng',
+    'hybrid' : 'hybrid',
+    'elektro' : 'electric',
+    'andre' : 'other'
+    }
+autos['fuel_type']=autos['fuel_type'].map(mapping_dict)
+autos['fuel_type'].fillna('other',inplace=True)
+autos['fuel_type'].unique()
+
+mapping_dict={
+    'manuell' : 'manual',
+    'automatik' : 'automatic'
+    }
+autos['gearbox']=autos['gearbox'].map(mapping_dict)
+autos['gearbox'].fillna('other',inplace=True)
+autos['gearbox'].unique()
+
+#Let's see what is the most common brand/name combination. To do this,
+#let's first extract the brand name from the name column.
+brand=autos['name']
+brand_f=brand.str.split('_',expand=True)[0]
+autos['brand']=brand_f
+autos.head()
