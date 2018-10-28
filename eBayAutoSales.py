@@ -228,3 +228,50 @@ brand=autos['name']
 brand_f=brand.str.split('_',expand=True)[0]
 autos['brand']=brand_f
 autos.head()
+
+
+autos['model'].unique()
+autos.drop(autos[autos['model']=='andere'].index,inplace=True)
+#I have noticed a lot of the brands have 'others' as the top model. I did not like this
+#because this shows no insight of the correlation of brand and model. So I dropped every
+#row with 'others'. Total of rows with 'others' is about 3200 out of 50000, so we are only
+#losing about 6 percent of the data which I am fine with.
+
+brand_model={}
+brands=autos['brand'].unique()
+for each in brands:
+    is_brand=autos['brand'].str.endswith(each)
+    autos_brand=autos[is_brand]
+    autos_brand_models=autos_brand.loc[:,['brand','model']].describe()
+    brand=autos_brand_models.loc['top','brand']
+    model=autos_brand_models.loc['top','model']
+    brand_model[brand]=model
+
+
+#Let's split the 'odometer_km' into groups and use aggregation to see
+#if average prices follows any patterns based on the mileage.
+#Proposing to split groups every 25km
+mileages=autos['odometer_km'].unique()
+
+group1=autos['odometer_km'].between(0,25000)
+group2=autos['odometer_km'].between(25001,50000)
+group3=autos['odometer_km'].between(50001,75000)
+group4=autos['odometer_km'].between(75001,100000)
+group5=autos['odometer_km'].between(100001,125000)
+group6=autos['odometer_km'].between(125001,150000)
+groups=[group1,group2,group3,group4,group5,group6]
+
+mileage_price={}
+group_name=['0km to 25km','25km to 50km','50km to 75km',
+            '75km to 100km','100km to 125km','125km to 150km']
+for i, each in enumerate(groups):
+    df=autos[each]
+    price_mean=df['price'].mean()
+    group=group_name[i-1]
+    mileage_price[group]=round(price_mean,2)
+    
+mileage_price
+#From the output, we can see the it is pretty reasonble. As the mileage increase,
+#the value of the vehicle decrease. However, Group2 does not fit this pattern. If 
+#we are looking to clean the data a bit more, we will probably remove the unreasonable prices
+#and see if it affects the data. Probably remove those with prices below 1000.
